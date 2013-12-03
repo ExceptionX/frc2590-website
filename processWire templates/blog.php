@@ -78,7 +78,24 @@ include("./header.inc");
 			<section>
 			<h3>Archive</h3>
 			</section>
-			
+			<?php
+				$blogs = $pages->get("/blog/");
+				$startYear = date("Y"); 
+				$endYear = 2007; 
+				$now = time();
+				for($year = $startYear; $year >= $endYear; $year--) {
+					for($month = 12; $month > 0; $month--) {
+						$startTime = strtotime("$year-$month-01");
+						if($startTime > $now) continue;
+						if($month == 12) $endTime = strtotime(($year+1) . "-01-01"); 
+							else $endTime = strtotime("$year-" . ($month+1) . "-01"); 
+						$entries = $blogs->children("created>=$startTime, created<$endTime");
+						foreach($entries as $entry){
+							echo "<li><a href='".$entry->url."'>".$entry->title."</a></li>";
+						}
+					}
+				}
+			?>
 		</aside> <!-- sidebar -->
 		
 	</div> <!--container-->
