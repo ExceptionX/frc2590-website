@@ -79,21 +79,49 @@ include("./header.inc");
 			<h3>Archive</h3>
 			</section>
 			<ul>
-			<?php
-				$blogs = $pages->get("/blog/");
-				$startYear = date("Y"); 
-				$endYear = 2008; 
-				$now = time();
-				for($year = $startYear; $year >= $endYear; $year--) {
-					echo "$year";
-					$nextYear = $year+1;
-					$entries=$pages->find("template=blogPost,date>=01/01/$year,date<01/01/$nextYear, sort=-date");
-					foreach($entries as $entry){
-							echo "<li><a href='".$entry->url."'>-".$entry->title."</a></li>";
+				<style type="text/css">
+					.mC {margin:5px;}
+					.mC h5 {cursor:pointer; font-weight:bold; border-top:1px;}
+					.mC ul {display:none; margin-bottom:10px; list-style:none;}
+				</style>
+				<div class= "mC">
+					<?php
+						$blogs = $pages->get("/blog/");
+						$startYear = date("Y"); 
+						$endYear = 2008; 
+						$now = time();
+						for($year = $startYear; $year >= $endYear; $year--) {
+							echo "<h5 id='menu$year'>$year</h5><ul>";
+							$nextYear = $year+1;
+							$entries=$pages->find("template=blogPost,date>=01/01/$year,date<01/01/$nextYear, sort=-date");
+							foreach($entries as $entry){
+								echo "<li><a href='".$entry->url."'>-".$entry->title."</a></li>";
+							}
+							echo "</ul>";
 						}
-				}
-			?>
-			 </ul>
+						echo "<script>
+	// unobtrusive collapsible menu
+	// copyright Stephen Chapman http://javascript.about.com
+	// 17th May 2008
+	//
+	// you may use this script on your site provided that
+	// the copyright notice is retained unaltered.
+	function toggleMenu(objID) {
+		if (!document.getElementById) return;
+		var ob = document.getElementById(objID).nextSibling;
+		ob = ob.style ? ob.style : ob.nextSibling.style;
+		ob.display = (ob.display == 'block')?'none': 'block';
+	}
+	var i = 2008;
+	while(document.getElementById('menu'+i)) {
+		document.getElementById('menu'+i).onclick= new Function(\"toggleMenu('menu\"+i+\"')\");
+		i++;
+	}
+</script>";
+					?>
+				</div>
+			
+			</ul>
 		</aside> <!-- sidebar -->
 		
 	</div> <!--container-->
